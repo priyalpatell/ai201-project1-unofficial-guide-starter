@@ -1,7 +1,7 @@
 import os
 import re
 
-DOCS_PATH = "./docs"
+from config import DOCS_PATH
 
 def pre_process() -> list[dict]:
     structured_files = []
@@ -70,31 +70,23 @@ def pre_process() -> list[dict]:
 
     return structured_files
 
-def chunk_text(location: str, filename: str, text: str) -> list[dict]:
+def chunk_text_by_characters(location: str, filename: str, text: str) -> list[dict]:
     """
     Splits a single file's text block into 400-character chunks with 
     a 40-character overlap. Generates a unique ID based on platform, 
     location, and count.
     """
     chunks_array = []
-    lower_filename = filename.lower()
-    
-    # Simplified platform check based on your guarantee
-    if "google" in lower_filename:
-        source_platform = "google"
-    elif "reddit" in lower_filename:
-        source_platform = "reddit"
-    else:
-        source_platform = "guru"
+    clean_filename = os.path.splitext(filename)[0].replace(" ", "_")
 
-    chunk_size = 340
-    overlap = 40
+    chunk_size = 200
+    overlap = 60
     start = 0
     counter = 1
     
     # Fallback if the entire text block fits within one chunk
     if len(text) <= chunk_size:
-        chunk_id = f"{source_platform}_{location}_chunk_{counter}"
+        chunk_id = f"{clean_filename}_chunk_{counter}"
         chunks_array.append({
             "text": text,
             "location": location,
@@ -107,7 +99,7 @@ def chunk_text(location: str, filename: str, text: str) -> list[dict]:
         end = start + chunk_size
         chunked_text = text[start:end]
         
-        chunk_id = f"{source_platform}_{location}_chunk_{counter}"
+        chunk_id = f"{clean_filename}_chunk_{counter}"
         
         chunks_array.append({
             "text": chunked_text,
@@ -120,6 +112,59 @@ def chunk_text(location: str, filename: str, text: str) -> list[dict]:
         
         # Stop sliding if the remaining text segment falls below the overlap window
         if start >= len(text) - overlap:
+            break
+
+    return chunks_array
+
+def chunk_text_by_words(location: str, filename: str, text: str) -> list[dict]:
+    chunks_array = []
+    clean_filename = os.path.splitext(filename)[0].replace(" ", "_")
+    
+    # Split the massive text wall into an array of full words
+    words = text.split()
+    
+    # 200 characters is roughly 35 words. 60 characters of overlap is roughly 10 words.
+    chunk_size_words = 35  
+    overlap_words = 10     
+    
+    start = 0
+    counter = 1
+    
+    if len(words) <= chunk_size_words:
+        chunk_id = f"{clean_filename}_{counter}"
+        chunks_array.append({
+            "text": " ".join(words),
+            "location": location,
+            "chunk_id": chunk_id
+        })
+        return chunks_array
+
+    while start < len(words):
+        end = start + chunk_size_words
+        chunked_words = words[start:end]
+        
+        # Join the words back into a perfectly clean text string
+        chunked_text = " ".join(chunked_words)
+        
+        chunk_id = f"{clean_filename}_{counter}"
+        chunks_array.append({
+            "text": chunked_text,
+            "location": location,
+            "chunk_id": chunk_id
+        })
+        
+        counter += 1
+        start += (chunk_size_words - overlap_words)
+        
+        if start >= len(words) - overlap_words:
+            # Grab any remaining trailing words so nothing is left behind
+            if start < len(words):
+                chunked_text = " ".join(words[start:])
+                chunks_array.append({
+                    "text": chunked_text,
+                    "location": location,
+                    "chunk_id": f"{clean_filename}_{counter}"
+                })
             break
 
     return chunks_array
