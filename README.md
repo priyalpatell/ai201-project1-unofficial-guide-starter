@@ -318,9 +318,11 @@ The spec constrained me to pick a specific chunk size and overlap. During implem
 - _What I changed or overrode:_
   I implemented these new rules and re-ran the query to test if the response was more grounded. I repeated this iterative process until I ended up with a final system rule list that consistently produced grounded responses.
 
-**Testing**
-- Chunking -
-**5 Sample Chunks**
+## Testing
+
+**Chunking**
+
+5 Sample Chunks
 Sample #1
   Filename : restaurant_guru_tercero.txt
   Chunk ID : restaurant_guru_tercero_1
@@ -329,7 +331,7 @@ Sample #1
 """
 Date: 25 days ago Tercero Dining Commons is exactly the kind of place that can make UC Davis feel overrated: expensive campus living paired with food that does not always feel worth the money, the
 """
---------------------------------------------------
+
 Sample #2
   Filename : restaurant_guru_tercero.txt
   Chunk ID : restaurant_guru_tercero_2
@@ -338,7 +340,7 @@ Sample #2
 """
 food that does not always feel worth the money, the hype, or the stress students are already dealing with. Date: a month ago For the most part the dinning hall does it's best. However, uncooked
 """
---------------------------------------------------
+
 Sample #3
   Filename : restaurant_guru_tercero.txt
   Chunk ID : restaurant_guru_tercero_3
@@ -347,7 +349,7 @@ Sample #3
 """
 most part the dinning hall does it's best. However, uncooked meat is an often occurrence and this is not the only dinning hall this has happened at. Date: 2 months ago dont eat the bao
 """
---------------------------------------------------
+
 Sample #4
   Filename : restaurant_guru_tercero.txt
   Chunk ID : restaurant_guru_tercero_4
@@ -356,7 +358,7 @@ Sample #4
 """
 happened at. Date: 2 months ago dont eat the bao bun................. Date: 2 months ago 味道还可以. Date: 4 months ago all the dishes are stained or dirty. burnt hamburgers and hair in food. Date: 7
 """
---------------------------------------------------
+
 Sample #5
   Filename : restaurant_guru_tercero.txt
   Chunk ID : restaurant_guru_tercero_5
@@ -365,9 +367,9 @@ Sample #5
 """
 or dirty. burnt hamburgers and hair in food. Date: 7 months ago As a former student, I love coming here to grab a bite and reminisce about my time at UCD. Always great food and
 """
---------------------------------------------------
 
-- Retrieval -
+**Retrieval**
+
 Retrieved 5 chunks for the query: 'Do the reviews mention the quality of the mongolian wok station?'
   --- Chunk 1 ---
   Text: months ago Used to be good. Possibly of food being undercooked (Mongolian wok). It seems the cooks have been advised. It is now satisfactory. --- Date: 6 years ago Segundo DC is probably the best
