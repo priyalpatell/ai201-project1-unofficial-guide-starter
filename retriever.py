@@ -19,6 +19,9 @@ COLLECTION = CLIENT.get_or_create_collection(
     embedding_function=PRESET_EMBEDDING_FUNCTION
 )
 
+def get_collection():
+    """Return the ChromaDB collection. Used by app.py during ingestion."""
+    return COLLECTION
 
 def embed_and_store(chunks_array: list[dict]) -> None:
     """
@@ -61,11 +64,13 @@ def retrieve(query, n_results=N_RESULTS) -> list[dict]:
 
     chunks = [
         {
+            "id": chunk_id,
             "text": text,
             "location": metadata["location"],
             "distance": distance,
         }
-        for text, metadata, distance in zip(
+        for chunk_id, text, metadata, distance in zip(
+            results["ids"][0],
             results["documents"][0], 
             results["metadatas"][0], 
             results["distances"][0]
