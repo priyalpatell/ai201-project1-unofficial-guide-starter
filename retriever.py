@@ -1,7 +1,6 @@
 import os
 import chromadb
 from chromadb.utils import embedding_functions
-from ingest import pre_process, chunk_text_by_words
 
 # Import your centralized configurations directly
 from config import EMBEDDING_MODEL, CHROMA_COLLECTION, CHROMA_PATH, N_RESULTS
@@ -77,69 +76,3 @@ def retrieve(query, n_results=N_RESULTS) -> list[dict]:
         )
     ]
     return chunks
-
-# # --- Updated Sandbox Local Test Run ---
-# if __name__ == "__main__":
-#     print("--- STARTING LOCAL PIPELINE REVERSE TEST ---")
-    
-#     # 1. Run the imported preprocessing logic
-#     processed_files = pre_process()
-#     all_chunks = []
-    
-#     # 2. Loop over and chunk the files
-#     for file_info in processed_files:
-#         file_chunks = chunk_text_by_words(
-#             location=file_info["location"],
-#             filename=file_info["filename"],
-#             text=file_info["text"]
-#         )
-#         all_chunks.extend(file_chunks)
-        
-#     print(f"Successfully processed files and generated {len(all_chunks)} chunks.")
-    
-#     # 3. Call your local embed_and_store function
-#     if all_chunks:
-#         embed_and_store(all_chunks)
-#     else:
-#         print("Test aborted: No chunks were generated. Check your text files.")
-        
-#     print("\n--- STARTING RETRIEVAL TEST ---")
-# 	# 4. Test the retrieval function with a sample query
-#     sample_query1 = "Do the reviews mention the quality of the mongolian wok station?"
-#     retrieved_chunks = retrieve(sample_query1)
-	
-#     if retrieved_chunks:
-#         print(f"Retrieved {len(retrieved_chunks)} chunks for the query: '{sample_query1}'")
-#         for idx, chunk in enumerate(retrieved_chunks, start=1):
-#             print(f"\n--- Chunk {idx} ---")
-#             print(f"Text: {chunk['text']}")
-#             print(f"Location: {chunk['location']}")
-#             print(f"Distance: {chunk['distance']}")
-#     else:
-#         print("No chunks retrieved. Check your database and query logic.")
-
-#     sample_query2 = "Which location is recommended for international or global food?"
-#     retrieved_chunks = retrieve(sample_query2)
-
-#     if retrieved_chunks:
-#         print(f"Retrieved {len(retrieved_chunks)} chunks for the query: '{sample_query2}'")
-#         for idx, chunk in enumerate(retrieved_chunks, start=1):
-#             print(f"\n--- Chunk {idx} ---")
-#             print(f"Text: {chunk['text']}")
-#             print(f"Location: {chunk['location']}")
-#             print(f"Distance: {chunk['distance']}")
-#     else:
-#         print("No chunks retrieved. Check your database and query logic.")
-
-#     sample_query3 = "What are the top complaints about Cuarto's food quality?"
-#     retrieved_chunks = retrieve(sample_query3)
-
-#     if retrieved_chunks:
-#         print(f"Retrieved {len(retrieved_chunks)} chunks for the query: '{sample_query3}'")
-#         for idx, chunk in enumerate(retrieved_chunks, start=1):
-#             print(f"\n--- Chunk {idx} ---")
-#             print(f"Text: {chunk['text']}")
-#             print(f"Location: {chunk['location']}")
-#             print(f"Distance: {chunk['distance']}")
-#     else:
-#         print("No chunks retrieved. Check your database and query logic.")
