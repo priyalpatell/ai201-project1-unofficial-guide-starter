@@ -15,7 +15,15 @@ def run_ingestion():
 
     print("Database empty. Starting text pre-processing and chunking...")
     cleaned_text = pre_process()
-    all_chunks = chunk_text_by_words(cleaned_text)
+    all_chunks = []
+    for file_data in cleaned_text:
+        # Pass the individual fields required by chunk_text_by_words
+        file_chunks = chunk_text_by_words(
+            location=file_data["location"],
+            filename=file_data["filename"],
+            text=file_data["text"]
+        )
+        all_chunks.extend(file_chunks)
 
     if all_chunks:
         print(f"Embedding and storing {len(all_chunks)} chunks...")

@@ -108,7 +108,7 @@ For source attribution, I used incline citations that the model is required to u
 | # | Question             | Expected Answer      | System Response      | Retrieval Quality    | Response Accuracy    |
 |   |                      |                      | (Summarized)         |                      |                      |
 +---+----------------------+----------------------+----------------------+----------------------+----------------------+
-| 1 | Which dining hall is | Latitude provides    | Latitude is          | Relevant             | Accurate             |
+| 1 | Which dining hall is | Latitude provides    | Latitude is          | Relevant             | Partially Accurate   |
 |   | recommended for      | the most             | recommended for      |                      |                      |
 |   | international food?  | international        | international food   |                      |                      |
 |   |                      | options.             | as it has options    |                      |                      |
@@ -157,18 +157,30 @@ For source attribution, I used incline citations that the model is required to u
 |   |                      |                      | regarding Cuarto's   |                      |                      |
 |   |                      |                      | food quality.        |                      |                      |
 +---+----------------------+----------------------+----------------------+----------------------+----------------------+
-| 3 | Do the reviews       | See if reviews only  | The reviews do not   | Off-target           | Inaccurate           |
-|   | mention the quality  | come from Segundo    | mention the quality  |                      |                      |
-|   | of the wok station?  | and Tercero.         | of the wok station   |                      |                      |
-|   |                      |                      | (REDDIT-THREAD-      |                      |                      |
-|   |                      |                      | 1ES4792.TXT,         |                      |                      |
-|   |                      |                      | GOOGLE_REVIEWS_      |                      |                      |
-|   |                      |                      | SEGUNDO.TXT,         |                      |                      |
-|   |                      |                      | GOOGLE_REVIEWS_      |                      |                      |
-|   |                      |                      | LATITUDE.TXT).       |                      |                      |
+| 3 | Do the reviews       | See if reviews only  | The quality of the   | Partially Relevant   | Partially Accurate   |
+|   | mention the quality  | come from Segundo    | wok station at the   |                      |                      |
+|   | of the wok station?  | and Tercero.         | Segundo Dining       |                      |                      |
+|   |                      |                      | Commons is reported  |                      |                      |
+|   |                      |                      | to have been a       |                      |                      |
+|   |                      |                      | concern in the past, |                      |                      |
+|   |                      |                      | with one review      |                      |                      |
+|   |                      |                      | noting the           |                      |                      |
+|   |                      |                      | possibility of food  |                      |                      |
+|   |                      |                      | being undercooked at |                      |                      |
+|   |                      |                      | the Mongolian wok    |                      |                      |
+|   |                      |                      | (GOOGLE_REVIEWS_     |                      |                      |
+|   |                      |                      | SEGUNDO.TXT).        |                      |                      |
+|   |                      |                      | However, it is also  |                      |                      |
+|   |                      |                      | stated that the      |                      |                      |
+|   |                      |                      | cooks have been      |                      |                      |
+|   |                      |                      | advised and the      |                      |                      |
+|   |                      |                      | quality is now       |                      |                      |
+|   |                      |                      | satisfactory         |                      |                      |
+|   |                      |                      | (GOOGLE_REVIEWS_     |                      |                      |
+|   |                      |                      | SEGUNDO.TXT).        |                      |                      |
 +---+----------------------+----------------------+----------------------+----------------------+----------------------+
-| 4 | Are there any        | Check if answer      | There is a mention   | Partially            | Partially            |
-|   | mentions of students | returned is          | of a student feeling | Relevant             | Inaccurate           |
+| 4 | Are there any        | Check if answer      | There is a mention   | Off target           | Inaccurate           |
+|   | mentions of students | returned is          | of a student feeling |                      |                      |
 |   | getting sick after   | relevant.            | unwell after         |                      |                      |
 |   | eating at one of the |                      | encountering the     |                      |                      |
 |   | dining commons?      |                      | food at Tercero,     |                      |                      |
@@ -257,16 +269,16 @@ For source attribution, I used incline citations that the model is required to u
      results from an unrelated review" is an explanation. -->
 
 **Question that failed:**
-Do the reviews mention the quality of the wok station?
+Are there any mentions of students getting sick after eating at one the dining commons?
 
 **What the system returned:**
-The reviews do not specifically mention the quality of the wok station (REDDIT-THREAD-1ES4792.TXT, GOOGLE_REVIEWS_SEGUNDO.TXT, GOOGLE_REVIEWS_LATITUDE.TXT).
+There is a mention of a student feeling sick after eating at TERCERO dining common, as one review states "I think I will vomit after smelling that odor" (GOOGLE_REVIEWS_TERCERO.TXT). However, this review does not explicitly state that the student got sick from eating at the dining common, only that they felt the urge to vomit after smelling an odor. There are no other mentions of students getting sick after eating at any of the dining commons (REDDIT-THREAD-WFFTJW.TXT, RESTAURANT_GURU_SEGUNDO.TXT, RESTAURANT_GURU_TERCERO.TXT, GOOGLE_REVIEWS_TERCERO.TXT).
 
 **Root cause (tied to a specific pipeline stage):**
-The failure occurred during the retrieval stage because the embedding model failed to capture the semantic connection between the query's specific term ("wok station") and how students actually described it in the reviews. Because the distance matching relied on general text similarities, it overlooked relevant chunks that likely used different phrasing or surrounding context to describe that station.
+The failure occurred during the generator stage as the student did not actually eat anything and become sick. The student only reported feeling sick. The system prompt rules failed to catch the irrelevance of this context to the actual query and should have returned no reviews found.
 
 **What you would change to fix it:**
-I first tried rephrasing the question because the wok station is also frequently referred to as the Mongolian wok station in the reviews. After I made this change, I noticed that adding the keyword "Mongolian" changed the embedding enough that the retrieval stage was able to discover the relevant contexts. With those correct chunks provided, the LLM was finally able to return a response that was relevant and partially accurate, drawing from multiple review comments and sources. This clearly shows how the pipeline's effectiveness is directly affected by query quality and specificity.
+To fix this, I need to update the system prompt rules to enforce a strict check on context relevance. The LLM needs to be trained to catch these details so that if a student only reported feeling sick from a smell, the system won't count it as someone actually eating the food and getting sick. If the context doesn't explicitly match the question, the system rules should force it to accurately return that there were no mentions of anyone getting sick after eating.
 
 ---
 
