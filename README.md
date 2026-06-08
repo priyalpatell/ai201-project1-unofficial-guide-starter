@@ -317,3 +317,134 @@ The spec constrained me to pick a specific chunk size and overlap. During implem
   It returned a modified rule list that stated more explicitly how the model should format its response.
 - _What I changed or overrode:_
   I implemented these new rules and re-ran the query to test if the response was more grounded. I repeated this iterative process until I ended up with a final system rule list that consistently produced grounded responses.
+
+**Testing**
+- Chunking -
+**5 Sample Chunks**
+Sample #1
+  Filename : restaurant_guru_tercero.txt
+  Chunk ID : restaurant_guru_tercero_1
+  Location : tercero
+  Text Snippet:
+"""
+Date: 25 days ago Tercero Dining Commons is exactly the kind of place that can make UC Davis feel overrated: expensive campus living paired with food that does not always feel worth the money, the
+"""
+--------------------------------------------------
+Sample #2
+  Filename : restaurant_guru_tercero.txt
+  Chunk ID : restaurant_guru_tercero_2
+  Location : tercero
+  Text Snippet:
+"""
+food that does not always feel worth the money, the hype, or the stress students are already dealing with. Date: a month ago For the most part the dinning hall does it's best. However, uncooked
+"""
+--------------------------------------------------
+Sample #3
+  Filename : restaurant_guru_tercero.txt
+  Chunk ID : restaurant_guru_tercero_3
+  Location : tercero
+  Text Snippet:
+"""
+most part the dinning hall does it's best. However, uncooked meat is an often occurrence and this is not the only dinning hall this has happened at. Date: 2 months ago dont eat the bao
+"""
+--------------------------------------------------
+Sample #4
+  Filename : restaurant_guru_tercero.txt
+  Chunk ID : restaurant_guru_tercero_4
+  Location : tercero
+  Text Snippet:
+"""
+happened at. Date: 2 months ago dont eat the bao bun................. Date: 2 months ago 味道还可以. Date: 4 months ago all the dishes are stained or dirty. burnt hamburgers and hair in food. Date: 7
+"""
+--------------------------------------------------
+Sample #5
+  Filename : restaurant_guru_tercero.txt
+  Chunk ID : restaurant_guru_tercero_5
+  Location : tercero
+  Text Snippet:
+"""
+or dirty. burnt hamburgers and hair in food. Date: 7 months ago As a former student, I love coming here to grab a bite and reminisce about my time at UCD. Always great food and
+"""
+--------------------------------------------------
+
+- Retrieval -
+Retrieved 5 chunks for the query: 'Do the reviews mention the quality of the mongolian wok station?'
+  --- Chunk 1 ---
+  Text: months ago Used to be good. Possibly of food being undercooked (Mongolian wok). It seems the cooks have been advised. It is now satisfactory. --- Date: 6 years ago Segundo DC is probably the best
+  Location: segundo
+  Distance: 0.4352649450302124
+
+  --- Chunk 2 ---
+  Text: price, but it is a bit bland. I enjoy the mongolian wok and the cowboy burger, but avoid the vegetarian options if possible. --- Date: 8 years ago Everything was in disarray. No milk, one
+  Location: segundo
+  Distance: 0.5161316394805908
+
+  --- Chunk 3 ---
+  Text: were flavorful but under cooked. Bummer the Mongolian barbecue was not open. The salad bar only had a couple of options and very few veggies. --- Date: 6 years ago I was very impressed. The
+  Location: segundo
+  Distance: 0.540032148361206
+
+  --- Chunk 4 ---
+  Text: Mongolian BBQ, kids love free ice cream and cereal, they stuff themselves too. sometimes the hot sandwiches are not good.. like the meat is fried long time ago and too hard to chew. --- Date:
+  Location: segundo
+  Distance: 0.5576896667480469
+
+  --- Chunk 5 ---
+  Text: sheer volume and quality of food I get I visit the Segundo Dining Commons. Ya, it might not meet some peoples' high standards and you'll read those complaints, but it's better than I ever had
+  Location: any
+  Distance: 0.5914081335067749
+
+
+Retrieved 5 chunks for the query: 'Which location is recommended for international or global food?'
+  --- Chunk 1 ---
+  Text: you want amazing international food, latitude is the way to go. Latitude tastes incredible. All you can eat too. I think it was 11.75 for a meal of you pay with aggie cash and typically
+  Location: any
+  Distance: 0.339347779750824
+
+  --- Chunk 2 ---
+  Text: something for everyone. Very good food. As the name implies, pick a continent and your food destination: Asia, Africa, Europe, Middle East, South America, etc. For a fixed price --- Date: 2 years ago It's
+  Location: latitude
+  Distance: 0.4482440948486328
+
+  --- Chunk 3 ---
+  Text: breakfast/dinner options. Their selection of Asian or international dishes is noticeably less extensive than Latitude’s. Date: 6 months ago terrible people running the market, fix your employees attitudes because god forbid they do their jobs
+  Location: latitude
+  Distance: 0.4483044743537903
+
+  --- Chunk 4 ---
+  Text: to healthy, vegetarian, and international options. You’ll always find something you enjoy, no matter your dietary preferences. The space is clean, spacious, and well-maintained, and even during busy hours, the staff keeps things running smoothly
+  Location: segundo
+  Distance: 0.44907623529434204
+
+  --- Chunk 5 ---
+  Text: veg which is great :) Date: Aug 14, 2024 Absolute peak. If you want typically American cuisine you go to tercero or segundo but if you want amazing international food, latitude is the way to
+  Location: any
+  Distance: 0.4714537262916565
+
+
+Retrieved 5 chunks for the query: 'What are the top complaints about Cuarto's food quality?'
+  --- Chunk 1 ---
+  Text: Date: 7 months ago Cuarto dining commons tends to have a good quality of food at any point of the day. My favorite time to go here is for dinner as they have more options
+  Location: cuarto
+  Distance: 0.36039483547210693
+
+  --- Chunk 2 ---
+  Text: Cuarto I think all the main dining commons are all the same and Latitude does have better food than the other three but because the menu only changes a little day by day I can’t
+  Location: any
+  Distance: 0.372700035572052
+
+  --- Chunk 3 ---
+  Text: where I live so I don’t go as often if Latitude or Segundo are available options. They have decent burgers. Never been to Cuarto but from housemates and friends I’ve heard it was dog water.
+  Location: any
+  Distance: 0.3794925808906555
+
+  --- Chunk 4 ---
+  Text: step above the other 3. Date: Aug 3, 2022 I didn’t go to cuarto that much since it was usually to far away. The food is usually the same quality between all the dining halls.
+  Location: any
+  Distance: 0.3913537263870239
+
+  --- Chunk 5 ---
+  Text: sheer volume and quality of food I get I visit the Segundo Dining Commons. Ya, it might not meet some peoples' high standards and you'll read those complaints, but it's better than I ever had
+  Location: any
+  Distance: 0.39595645666122437
+
